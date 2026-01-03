@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Desires Accessories</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff;color:#333}
+header{
+background:linear-gradient(135deg,#f7c6d9,#fce4ec);
+padding:50px 20px;text-align:center
+}
+header h1{font-size:44px;margin:0}
+header p{font-size:18px;margin-top:10px}
+
+.container{max-width:1200px;margin:auto;padding:30px}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:25px}
+
+.card{
+border:1px solid #eee;border-radius:16px;
+box-shadow:0 6px 18px rgba(0,0,0,.08);
+padding:18px;text-align:center
+}
+.card img{width:100%;border-radius:14px}
+.price{font-size:22px;font-weight:bold;color:#e75480}
+
+button{
+padding:12px;border:none;border-radius:10px;
+font-size:15px;cursor:pointer;width:100%;margin-top:8px
+}
+.cartbtn{background:#ff8fb1;color:#fff}
+.buybtn{background:#e75480;color:#fff}
+.upibtn{background:#6a1b9a;color:#fff}
+
+#cart{
+margin-top:50px;background:#fafafa;
+padding:25px;border-radius:16px;border:1px solid #ddd
+}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #ddd;text-align:center}
+th{background:#f0f0f0}
+
+footer{
+background:#111;color:#fff;
+padding:45px 20px;margin-top:60px
+}
+footer a{color:#ffb6c1;text-decoration:none}
+
+.modal{
+display:none;position:fixed;top:0;left:0;
+width:100%;height:100%;background:rgba(0,0,0,.6)
+}
+.modal-content{
+background:#fff;max-width:360px;
+margin:15% auto;padding:25px;
+border-radius:16px;text-align:center
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Desires Accessories</h1>
+<p>Handpicked Accessories for Every Beautiful You</p>
+</header>
+
+<div class="container">
+<h2>Our Exclusive Boxes</h2>
+
+<div class="products">
+<div class="card">
+<img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9">
+<h3>Mini Desire Box</h3>
+<div class="price">₹149</div>
+<button class="cartbtn" onclick="addToCart('Mini Desire Box',149)">Add to Cart</button>
+<button class="buybtn" onclick="openPayment('Mini Desire Box',149)">Buy Now</button>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1519741497674-611481863552">
+<h3>Classic Desire Box</h3>
+<div class="price">₹299</div>
+<button class="cartbtn" onclick="addToCart('Classic Desire Box',299)">Add to Cart</button>
+<button class="buybtn" onclick="openPayment('Classic Desire Box',299)">Buy Now</button>
+</div>
+
+<div class="card">
+<img src="https://images.unsplash.com/photo-1520975916090-3105956dac38">
+<h3>Premium Desire Box</h3>
+<div class="price">₹499</div>
+<button class="cartbtn" onclick="addToCart('Premium Desire Box',499)">Add to Cart</button>
+<button class="buybtn" onclick="openPayment('Premium Desire Box',499)">Buy Now</button>
+</div>
+</div>
+
+<div id="cart">
+<h2>🛒 Your Cart</h2>
+<table>
+<thead>
+<tr><th>Product</th><th>Price</th><th>Buy</th></tr>
+</thead>
+<tbody id="cartItems"></tbody>
+</table>
+</div>
+</div>
+
+<footer>
+<h3>About Desires Accessories</h3>
+<p>
+Desires Accessories brings you thoughtfully curated accessory boxes
+designed to add charm, confidence, and happiness to your everyday look.
+</p>
+
+<h3>Contact</h3>
+<p>📞 WhatsApp / Call:
+<a href="https://wa.me/919870692723">+91 9870692723</a></p>
+
+<p style="margin-top:20px;font-size:14px;">
+© 2026 Desires Accessories • All Rights Reserved
+</p>
+</footer>
+
+<div class="modal" id="paymentModal">
+<div class="modal-content">
+<h3>Complete Your Payment 💖</h3>
+
+<a id="upiLink">
+<button class="upibtn">Pay via UPI</button>
+</a>
+
+<p style="margin-top:15px">
+Payment karne ke baad please
+<strong>screenshot</strong> bhejein taaki hum
+aapka order confirm kar saken 🙏
+</p>
+
+<a href="https://wa.me/919870692723" target="_blank">
+📩 Send Payment Screenshot on WhatsApp
+</a>
+
+<br><br>
+<button onclick="closeModal()">Close</button>
+</div>
+</div>
+
+<script>
+const upiId="9870692723@sbi";
+
+function addToCart(product,price){
+let cart=JSON.parse(localStorage.getItem("cart")||"[]");
+cart.push({product,price});
+localStorage.setItem("cart",JSON.stringify(cart));
+loadCart();
+}
+
+function loadCart(){
+let cart=JSON.parse(localStorage.getItem("cart")||"[]");
+let tbody=document.getElementById("cartItems");
+tbody.innerHTML="";
+cart.forEach(item=>{
+tbody.innerHTML+=
+`<tr>
+<td>${item.product}</td>
+<td>₹${item.price}</td>
+<td>
+<button class="buybtn"
+onclick="openPayment('${item.product}',${item.price})">
+Buy
+</button>
+</td>
+</tr>`;
+});
+}
+
+function openPayment(product,price){
+document.getElementById("upiLink").href=
+`upi://pay?pa=${upiId}&pn=Desires%20Accessories&am=${price}&cu=INR&tn=Payment%20for%20${product}`;
+document.getElementById("paymentModal").style.display="block";
+}
+
+function closeModal(){
+document.getElementById("paymentModal").style.display="none";
+}
+
+loadCart();
+</script>
+
+</body>
+</html>
